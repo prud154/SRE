@@ -1,0 +1,22 @@
+global:
+  #resolve_timeout: 1m
+  slack_api_url: 'https://hooks.slack.com/services/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'
+  pagerduty_url: 'https://events.pagerduty.com/generic/2010-04-15/create_event.json'
+
+route:
+  receiver: 'pagerduty-notifications'
+  group_by: ['alertname','instance','severity']
+
+  routes:
+    - receiver: "pagerduty-notifications"
+      group_wait: 10s
+      match_re:
+        severity: critical|warning
+      continue: true
+
+
+receivers:
+- name: 'pagerduty-notifications'
+  pagerduty_configs:
+  - service_key: 26d9626ff6e14e0cd05b1a8b96134147
+    send_resolved: true

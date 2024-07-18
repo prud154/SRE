@@ -1,0 +1,41 @@
+global:
+  scrape_interval: 15s
+
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets: ['prom.awsb56.xyz:9093']
+
+
+rule_files:
+- alert_rules.yml
+
+scrape_configs:
+- job_name: 'prometheus_server_job'
+  scrape_interval: 5s
+  static_configs:
+  - targets: ['localhost:9090','prom.awsb56.xyz:9090']
+
+- job_name: cadvisor-for-dockerhost
+  scrape_interval: 5s
+  static_configs:
+  - targets:
+    - dockerhost01.awsb56.xyz:8080
+
+- job_name: node-exporter-for-linuxhost
+  scrape_interval: 5s
+  static_configs:
+  - targets:
+    - dockerhost01.awsb56.xyz:9100
+    #- dockerhost02.awsb56.xyz:9100
+
+- job_name: AppServers
+  scrape_interval: 5s
+  static_configs:
+  - targets:
+    - client1.awsb56.xyz:9100
+    - client2.awsb56.xyz:9100
+    labels:
+      batch: 'b36'
+      env: 'prod'
+
